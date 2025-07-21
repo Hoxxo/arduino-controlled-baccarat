@@ -3,5 +3,15 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "ES2021",
+      "dom",
+      "DOM.Iterable",
+      "WebWorker",
+      "WebSerial",
+    ]
+  }
 }
