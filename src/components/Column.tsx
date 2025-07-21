@@ -12,14 +12,11 @@ export type ColProps = {
 }
 
 export default function Column({ WinnerColumns }: ColProps) {
-  //let winnerCol: [Player] = [Player.Dealer, Player.Dealer];
-  let [winner, setWinner] = useState(Player.Dealer);
-
   return (
-    WinnerColumns.map(w => {
-      return <div>
-        <Box winner={w}/>
-      </div>
-    })
+    <div className="column">
+      {WinnerColumns.map((w, i) => (
+        <Box key={i} winner={w}/>
+      ))}
+    </div>
   )
 }

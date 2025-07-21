@@ -7,12 +7,12 @@ type BoardProps = {
 
 export default function Board({ Winners }: BoardProps) {
   return (
-    <>
-      {Winners.map(v => {
-        return <div>
-          <Column WinnerColumns={v}/>
+    <div className="board">
+      {Winners.map((col, ci) => (
+        <div className="board__column-wrapper" key={ci}>
+          <Column WinnerColumns={col}/>
         </div>
-      })}
-    </>
+      ))}
+    </div>
   )
 }

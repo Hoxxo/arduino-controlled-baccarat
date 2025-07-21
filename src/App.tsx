@@ -5,24 +5,24 @@ import './App.css'
 
 function App() {
   let [winners, setWinners] = useState<Player[]>([])
-  let [mat, setMat] = useState<Player[][]>([[]])
+  let [mat, setMat] = useState<Player[][]>([])
 
   const handleKeypress = (e: React.KeyboardEvent) => {
-    let nextWinCol: Player[] = winners.slice()
-    let nextMat: Player[][] = []
+    const nextWinCol = [...winners]
 
     if (e.key === 'd') {
       nextWinCol.push(Player.Dealer)
-      setWinners(nextWinCol)
     } else if (e.key === 'p') {
       nextWinCol.push(Player.Player)
-      setWinners(nextWinCol)
     } else {
       alert("Non-valid character!")
+      return
     }
 
+    const nextMat: Player[][] = []
     let currGroup: Player[] = []
-    for (const w of winners) {
+
+    for (const w of nextWinCol) {
       if (currGroup.length === 0 || w === currGroup[0]) {
         currGroup.push(w)
       } else {
@@ -34,7 +34,9 @@ function App() {
       nextMat.push(currGroup)
     }
 
+    setWinners(nextWinCol)
     setMat(nextMat)
+    console.log(nextMat)
   }
 
   return (
