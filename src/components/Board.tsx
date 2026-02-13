@@ -1,18 +1,17 @@
-import Column, {Player} from "./Column.tsx";
-import Box from "./Box.tsx";
+import { Player } from './Constants.ts';
 
 type BoardProps = {
-  Winners: Player[][]
-}
+  Winners: Player[][];
+};
 
 export default function Board({ Winners }: BoardProps) {
   return (
     <div className="board">
       {Winners.map((col, ci) => (
         <div className="board__column-wrapper" key={ci}>
-          <Column WinnerColumns={col}/>
+          <Column WinnerColumns={col} />
         </div>
       ))}
     </div>
-  )
+  );
 }

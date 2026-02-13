@@ -6,12 +6,6 @@
   ],
   "compilerOptions": {
     "target": "ES2023",
-    "lib": [
-      "ES2021",
-      "dom",
-      "DOM.Iterable",
-      "WebWorker",
-      "WebSerial",
-    ]
+    "lib": ["ES2021", "dom", "DOM.Iterable", "WebWorker", "WebSerial"]
   }
 }

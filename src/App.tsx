@@ -1,54 +1,75 @@
-import {useState} from 'react'
-import Column, {Player} from './components/Column.tsx'
-import Board from './components/Board.tsx'
-import './App.css'
+import { useState } from 'react';
+import { Player } from './components/Constants.ts';
+import Board from './components/Board.tsx';
+import { InputMethods } from './components/Constants.ts';
+import Controller from './components/Controller.tsx';
+import './App.css';
 
 function App() {
-  let [winners, setWinners] = useState<Player[]>([])
-  let [mat, setMat] = useState<Player[][]>([])
+  const [_winners, setWinners] = useState<Player[]>([]);
+  const [mat, setMat] = useState<Player[][]>([]);
+  const [inputMethod, setInputMethod] = useState<InputMethods>(
+    InputMethods.Text
+  );
 
-  const handleKeypress = (e: React.KeyboardEvent) => {
-    const nextWinCol = [...winners]
+  const addWinner = (player: Player) => {
+    setWinners((prev) => {
+      const nextWinCol = [...prev, player];
 
-    if (e.key === 'd') {
-      nextWinCol.push(Player.Dealer)
-    } else if (e.key === 'p') {
-      nextWinCol.push(Player.Player)
-    } else {
-      alert("Non-valid character!")
-      return
-    }
-
-    const nextMat: Player[][] = []
-    let currGroup: Player[] = []
-
-    for (const w of nextWinCol) {
-      if (currGroup.length === 0 || w === currGroup[0]) {
-        currGroup.push(w)
-      } else {
-        nextMat.push(currGroup)
-        currGroup = [w]
+      const nextMat: Player[][] = [];
+      let currGroup: Player[] = [];
+      for (const w of nextWinCol) {
+        if (currGroup.length === 0 || w === currGroup[0]) {
+          currGroup.push(w);
+        } else {
+          nextMat.push(currGroup);
+          currGroup = [w];
+        }
       }
-    }
-    if (currGroup.length) {
-      nextMat.push(currGroup)
-    }
+      if (currGroup.length) nextMat.push(currGroup);
 
-    setWinners(nextWinCol)
-    setMat(nextMat)
-    console.log(nextMat)
-  }
+      setMat(nextMat);
+      return nextWinCol;
+    });
+  };
+
+  const handleSerialInput = (ch: string) => {
+    const input = ch.toUpperCase();
+    if (input === 'D') addWinner(Player.Dealer);
+    if (input === 'P') addWinner(Player.Player);
+  };
 
   return (
     <>
       <div>
-        <input type='text' onKeyDown={handleKeypress}/>
+        <Board Winners={mat} />
       </div>
-      <div>
-        <Board Winners={mat}/>
+
+      <div className="controls">
+        <label htmlFor="method-select">Choose control method: </label>
+        <select
+          id="method-select"
+          onChange={(e) =>
+            setInputMethod(
+              e.target.value === 'text'
+                ? InputMethods.Text
+                : InputMethods.Arduino
+            )
+          }
+        >
+          <option value="text">Text</option>
+          <option value="ard">Arduino</option>
+        </select>
+        <div>
+          <Controller
+            selectedController={inputMethod}
+            onAction={addWinner}
+            onSerialInput={handleSerialInput}
+          />
+        </div>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

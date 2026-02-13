@@ -1,22 +1,16 @@
-import { useState } from 'react'
-import Box from "./Box.tsx"
-import Props from "./Box.tsx"
-
-export enum Player {
-  Dealer = 'X',
-  Player = 'O'
-}
+import Box from './Box.tsx';
+import { Player } from './Constants.ts';
 
 export type ColProps = {
-  WinnerColumns: Player[]
-}
+  WinnerColumns: Player[];
+};
 
 export default function Column({ WinnerColumns }: ColProps) {
   return (
     <div className="column">
       {WinnerColumns.map((w, i) => (
-        <Box key={i} winner={w}/>
+        <Box key={i} winner={w} />
       ))}
     </div>
-  )
+  );
 }
