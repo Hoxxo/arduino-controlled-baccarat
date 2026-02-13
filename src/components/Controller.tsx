@@ -15,21 +15,20 @@ export default function Controller({
   onSerialInput,
 }: ControllerProps) {
   const [err, setErr] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleKeypress = (e: React.ChangeEvent<HTMLInputElement>) => {
     const ch = e.target.value.toLowerCase().slice(-1);
     if (ch === 'd') {
       onAction(Player.Dealer);
-      setErr(false);
     } else if (ch === 'p') {
       onAction(Player.Player);
-      setErr(false);
     } else if (ch === '') {
       setErr(false); // Don't display error on backspace/clear
     } else {
       setErr(true);
     }
-    e.target.value = '';
+    setInputValue("")
   };
 
   useEffect(() => {
@@ -47,6 +46,7 @@ export default function Controller({
           <input
             type="text"
             onChange={handleKeypress}
+            value={inputValue}
             placeholder="Type 'd' for dealer, or 'p' for player win"
             autoFocus
             style={{

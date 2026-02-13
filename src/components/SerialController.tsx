@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type SerialControllerProps = {
+type SerialControllerProps = {
   onInput: (ch: string) => void;
 };
 
@@ -57,7 +57,7 @@ export default function SerialController({ onInput }: SerialControllerProps) {
             </span>
             <br />
             If you want to use this feature, use a Chromium browser, or a
-            browser that supports <code>navigator.serial.</code>
+            browser that supports <code>navigator.serial</code>.
             <br />
             Additionally, this feature will <em>not</em> work outside localhost
             or secure HTTPS environments.

@@ -33,6 +33,10 @@ function App() {
     });
   };
 
+  const handleClear = (_: React.MouseEvent<HTMLButtonElement>) => {
+    setMat([])
+  }
+
   const handleSerialInput = (ch: string) => {
     const input = ch.toUpperCase();
     if (input === 'D') addWinner(Player.Dealer);
@@ -41,7 +45,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <Board Winners={mat} />
       </div>
 
@@ -67,6 +71,9 @@ function App() {
             onSerialInput={handleSerialInput}
           />
         </div>
+      </div>
+      <div>
+        <button className="clear-button" onClick={handleClear}>Clear Board</button>
       </div>
     </>
   );

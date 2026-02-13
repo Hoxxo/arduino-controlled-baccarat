@@ -72,3 +72,14 @@
 .playerWin {
   color: blue;
 }
+
+.clear-button {
+  color: red;
+  border: 1px solid transparent;
+  transition: border-color 0.25s;
+}
+
+.clear-button:hover {
+  border-color: red;
+  color: red;
+}

@@ -1,4 +1,5 @@
 import { Player } from './Constants.ts';
+import Column from "./Column.tsx";
 
 type BoardProps = {
   Winners: Player[][];
