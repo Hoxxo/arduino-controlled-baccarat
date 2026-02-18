@@ -1,4 +1,4 @@
-import {Player} from "./Constants.ts";
+import { Player } from './Constants.ts';
 import { playerWin, dealerWin } from './Winners.tsx';
 
 export type BoxProps = {

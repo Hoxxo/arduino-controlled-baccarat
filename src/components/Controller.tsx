@@ -19,16 +19,22 @@ export default function Controller({
 
   const handleKeypress = (e: React.ChangeEvent<HTMLInputElement>) => {
     const ch = e.target.value.toLowerCase().slice(-1);
-    if (ch === 'd') {
-      onAction(Player.Dealer);
-    } else if (ch === 'p') {
-      onAction(Player.Player);
-    } else if (ch === '') {
-      setErr(false); // Don't display error on backspace/clear
-    } else {
-      setErr(true);
+    switch (ch) {
+      case 'd':
+        onAction(Player.Dealer);
+        break;
+      case 'p':
+        onAction(Player.Player);
+        break;
+      case 'c':
+        onAction()
+      case '':
+        setErr(false); // Don't display error on backspace/clear
+        break;
+      default:
+        setErr(true);
     }
-    setInputValue("")
+    setInputValue('');
   };
 
   useEffect(() => {

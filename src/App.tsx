@@ -34,8 +34,8 @@ function App() {
   };
 
   const handleClear = (_: React.MouseEvent<HTMLButtonElement>) => {
-    setMat([])
-  }
+    setMat([]);
+  };
 
   const handleSerialInput = (ch: string) => {
     const input = ch.toUpperCase();
@@ -73,7 +73,9 @@ function App() {
         </div>
       </div>
       <div>
-        <button className="clear-button" onClick={handleClear}>Clear Board</button>
+        <button className="clear-button" onClick={handleClear}>
+          Clear Board
+        </button>
       </div>
     </>
   );
