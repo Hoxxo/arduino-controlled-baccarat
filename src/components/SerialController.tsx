@@ -15,8 +15,9 @@ export default function SerialController({ onInput }: SerialControllerProps) {
       const p = await navigator.serial.requestPort();
       await p.open({ baudRate: 9600 });
       setPort(p);
-    } catch (e) {
-      setError(e.message || 'Failed to open port');
+    } catch (e: unknown) {
+      const err = e as Error;
+      setError(err.message || 'Failed to open port');
     }
   };
 
@@ -36,8 +37,9 @@ export default function SerialController({ onInput }: SerialControllerProps) {
           }
         }
         reader.releaseLock();
-      } catch (e) {
-        setError(e.message || 'Read error');
+      } catch (e: unknown) {
+        const err = e as Error;
+        setError(err.message || 'Read error');
       }
     })();
     return () => {

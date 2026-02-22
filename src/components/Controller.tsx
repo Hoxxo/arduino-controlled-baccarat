@@ -5,7 +5,7 @@ import { InputMethods } from './Constants.ts';
 
 type ControllerProps = {
   selectedController: InputMethods;
-  onAction: (player: Player) => void;
+  onAction: (player?: Player, control?: string) => void;
   onSerialInput: (ch: string) => void;
 };
 
@@ -27,7 +27,11 @@ export default function Controller({
         onAction(Player.Player);
         break;
       case 'c':
-        onAction()
+        onAction(undefined, 'c');
+        break;
+      case 'u':
+        onAction(undefined, 'u');
+        break;
       case '':
         setErr(false); // Don't display error on backspace/clear
         break;

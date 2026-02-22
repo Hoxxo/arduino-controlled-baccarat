@@ -33,6 +33,28 @@ function App() {
     });
   };
 
+  const handleInput = (add?: Player, control?: string) => {
+    if (add !== undefined) {
+      addWinner(add);
+      return;
+    }
+
+    if (control === 'u') {
+      setWinners((prev) => {
+        if (prev.length !== 0) {
+          prev.pop();
+          setWinners(prev);
+          return prev;
+        } else {
+          return prev;
+        }
+      });
+    } else if (control === 'c') {
+      setMat([]);
+      setWinners([]);
+    }
+  };
+
   const handleClear = (_: React.MouseEvent<HTMLButtonElement>) => {
     setMat([]);
   };
@@ -41,6 +63,10 @@ function App() {
     const input = ch.toUpperCase();
     if (input === 'D') addWinner(Player.Dealer);
     if (input === 'P') addWinner(Player.Player);
+    if (input === 'C') setMat([]);
+    // if (input === 'U') setWinners((prev) => {
+    //   setMat(prev);
+    // });
   };
 
   return (
@@ -67,7 +93,7 @@ function App() {
         <div>
           <Controller
             selectedController={inputMethod}
-            onAction={addWinner}
+            onAction={handleInput}
             onSerialInput={handleSerialInput}
           />
         </div>
