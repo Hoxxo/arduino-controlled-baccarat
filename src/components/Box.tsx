@@ -6,25 +6,29 @@ export type BoxProps = {
   cell: Cell;
 };
 
-export default function Box({ cell }: BoxProps) {
-  const symbol =
-    cell.winner === Player.Dealer
-      ? dealerWin()
-      : cell.winner === Player.Player
-        ? playerWin()
-        : tieWin();
+const RESULT_SYMBOLS = {
+  [Player.Dealer]: dealerWin,
+  [Player.Player]: playerWin,
+} as const;
 
-  const showBadge =
-    cell.tieCount > 0 && !(cell.winner === Player.Tie && cell.tieCount === 1);
+export default function Box({ cell }: BoxProps) {
+  if (cell.kind === 'tie') {
+    return (
+      <button className="box box--tie-only">
+        {tieWin()}
+        {cell.tieCount > 1 && <span className="tie-badge">{cell.tieCount}</span>}
+      </button>
+    );
+  }
+
+  const variantClass =
+    cell.winner === Player.Dealer ? 'box--dealer' : 'box--player';
 
   return (
-    <button className="box">
-      {symbol}
-      {showBadge && (
-        <span className="tie-badge">
-          {cell.tieCount > 1 ? cell.tieCount : ''}
-        </span>
-      )}
+    <button className={`box ${variantClass}`}>
+      {RESULT_SYMBOLS[cell.winner]()}
+      {cell.tieCount === 1 && <span className="tie-mark" />}
+      {cell.tieCount > 1 && <span className="tie-badge">{cell.tieCount}</span>}
     </button>
   );
 }

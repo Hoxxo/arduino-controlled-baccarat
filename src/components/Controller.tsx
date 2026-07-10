@@ -9,6 +9,8 @@ type ControllerProps = {
   onSerialInput: (ch: string) => void;
 };
 
+const PLACEHOLDER_TEXT = "'d' banker, 'p' player, 't' tie, 'u' undo, 'c' clear";
+
 export default function Controller({
   selectedController,
   onAction,
@@ -60,11 +62,11 @@ export default function Controller({
             type="text"
             onChange={handleKeypress}
             value={inputValue}
-            placeholder="'d' dealer, 'p' player, 't' tie, 'u' undo, 'c' clear"
+            placeholder={PLACEHOLDER_TEXT}
             autoFocus
             style={{
               margin: '10px',
-              width: `${"'d' dealer, 'p' player, 't' tie, 'u' undo, 'c' clear".length}ch`,
+              width: `${PLACEHOLDER_TEXT.length}ch`,
             }}
           />
           {err && <div style={{ color: 'cyan' }}>Non-supported key input!</div>}

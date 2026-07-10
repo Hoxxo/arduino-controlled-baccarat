@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Player } from './components/Constants.ts';
 import Board from './components/Board.tsx';
 import { InputMethods } from './components/Constants.ts';
@@ -16,47 +16,55 @@ function App() {
   const mat = useMemo(() => buildMat(events), [events]);
   const stats = useMemo(() => computeStats(events), [events]);
 
-  const addWinner = (player: Player) => {
+  const addWinner = useCallback((player: Player) => {
     setEvents((prev) => [...prev, player]);
-  };
+  }, []);
 
-  const undo = () => {
+  const undo = useCallback(() => {
     setEvents((prev) => (prev.length === 0 ? prev : prev.slice(0, -1)));
-  };
+  }, []);
 
-  const clear = () => {
+  const clear = useCallback(() => {
     setEvents([]);
-  };
+  }, []);
 
-  const handleInput = (add?: Player, control?: string) => {
-    if (add !== undefined) {
-      addWinner(add);
-      return;
-    }
+  const handleInput = useCallback(
+    (add?: Player, control?: string) => {
+      if (add !== undefined) {
+        addWinner(add);
+        return;
+      }
 
-    if (control === 'u') {
-      undo();
-    } else if (control === 'c') {
-      clear();
-    }
-  };
+      if (control === 'u') {
+        undo();
+      } else if (control === 'c') {
+        clear();
+      }
+    },
+    [addWinner, undo, clear]
+  );
 
-  const handleSerialInput = (ch: string) => {
-    const input = ch.toUpperCase();
-    if (input === 'D') addWinner(Player.Dealer);
-    else if (input === 'P') addWinner(Player.Player);
-    else if (input === 'T') addWinner(Player.Tie);
-    else if (input === 'C') clear();
-    else if (input === 'U') undo();
-  };
+  const handleSerialInput = useCallback(
+    (ch: string) => {
+      const input = ch.toUpperCase();
+      if (input === 'D') addWinner(Player.Dealer);
+      else if (input === 'P') addWinner(Player.Player);
+      else if (input === 'T') addWinner(Player.Tie);
+      else if (input === 'C') clear();
+      else if (input === 'U') undo();
+    },
+    [addWinner, clear, undo]
+  );
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <h1 className="scoreboard-title">Baccarat</h1>
+
+      <div className="board-row">
         <Board Winners={mat} />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <div className="board-row">
         <Stats stats={stats} />
       </div>
 

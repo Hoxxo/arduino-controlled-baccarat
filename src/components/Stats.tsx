@@ -14,7 +14,7 @@ export default function Stats({ stats }: StatsProps) {
         <strong>{stats.total}</strong>
       </div>
       <div className="stats__item stats__item--dealer">
-        <span>Dealer</span>
+        <span>Banker</span>
         <strong>
           {stats.dealerWins} ({fmt(stats.dealerPct)})
         </strong>
