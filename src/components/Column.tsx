@@ -1,15 +1,15 @@
 import Box from './Box.tsx';
-import { Player } from './Constants.ts';
+import type { Cell } from './GameLogic.ts';
 
 export type ColProps = {
-  WinnerColumns: Player[];
+  WinnerColumns: Cell[];
 };
 
 export default function Column({ WinnerColumns }: ColProps) {
   return (
     <div className="column">
-      {WinnerColumns.map((w, i) => (
-        <Box key={i} winner={w} />
+      {WinnerColumns.map((cell, i) => (
+        <Box key={i} cell={cell} />
       ))}
     </div>
   );

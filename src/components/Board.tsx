@@ -1,8 +1,8 @@
-import { Player } from './Constants.ts';
 import Column from './Column.tsx';
+import type { Cell } from './GameLogic.ts';
 
 type BoardProps = {
-  Winners: Player[][];
+  Winners: Cell[][];
 };
 
 export default function Board({ Winners }: BoardProps) {

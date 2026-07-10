@@ -1,36 +1,31 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Player } from './components/Constants.ts';
 import Board from './components/Board.tsx';
 import { InputMethods } from './components/Constants.ts';
 import Controller from './components/Controller.tsx';
+import Stats from './components/Stats.tsx';
+import { buildMat, computeStats } from './components/GameLogic.ts';
 import './App.css';
 
 function App() {
-  const [_winners, setWinners] = useState<Player[]>([]);
-  const [mat, setMat] = useState<Player[][]>([]);
+  const [events, setEvents] = useState<Player[]>([]);
   const [inputMethod, setInputMethod] = useState<InputMethods>(
     InputMethods.Text
   );
 
+  const mat = useMemo(() => buildMat(events), [events]);
+  const stats = useMemo(() => computeStats(events), [events]);
+
   const addWinner = (player: Player) => {
-    setWinners((prev) => {
-      const nextWinCol = [...prev, player];
+    setEvents((prev) => [...prev, player]);
+  };
 
-      const nextMat: Player[][] = [];
-      let currGroup: Player[] = [];
-      for (const w of nextWinCol) {
-        if (currGroup.length === 0 || w === currGroup[0]) {
-          currGroup.push(w);
-        } else {
-          nextMat.push(currGroup);
-          currGroup = [w];
-        }
-      }
-      if (currGroup.length) nextMat.push(currGroup);
+  const undo = () => {
+    setEvents((prev) => (prev.length === 0 ? prev : prev.slice(0, -1)));
+  };
 
-      setMat(nextMat);
-      return nextWinCol;
-    });
+  const clear = () => {
+    setEvents([]);
   };
 
   const handleInput = (add?: Player, control?: string) => {
@@ -40,39 +35,29 @@ function App() {
     }
 
     if (control === 'u') {
-      setWinners((prev) => {
-        if (prev.length !== 0) {
-          prev.pop();
-          setWinners(prev);
-          return prev;
-        } else {
-          return prev;
-        }
-      });
+      undo();
     } else if (control === 'c') {
-      setMat([]);
-      setWinners([]);
+      clear();
     }
-  };
-
-  const handleClear = (_: React.MouseEvent<HTMLButtonElement>) => {
-    setMat([]);
   };
 
   const handleSerialInput = (ch: string) => {
     const input = ch.toUpperCase();
     if (input === 'D') addWinner(Player.Dealer);
-    if (input === 'P') addWinner(Player.Player);
-    if (input === 'C') setMat([]);
-    // if (input === 'U') setWinners((prev) => {
-    //   setMat(prev);
-    // });
+    else if (input === 'P') addWinner(Player.Player);
+    else if (input === 'T') addWinner(Player.Tie);
+    else if (input === 'C') clear();
+    else if (input === 'U') undo();
   };
 
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <Board Winners={mat} />
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <Stats stats={stats} />
       </div>
 
       <div className="controls">
@@ -99,7 +84,7 @@ function App() {
         </div>
       </div>
       <div>
-        <button className="clear-button" onClick={handleClear}>
+        <button className="clear-button" onClick={clear}>
           Clear Board
         </button>
       </div>

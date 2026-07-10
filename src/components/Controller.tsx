@@ -26,6 +26,9 @@ export default function Controller({
       case 'p':
         onAction(Player.Player);
         break;
+      case 't':
+        onAction(Player.Tie);
+        break;
       case 'c':
         onAction(undefined, 'c');
         break;
@@ -57,11 +60,11 @@ export default function Controller({
             type="text"
             onChange={handleKeypress}
             value={inputValue}
-            placeholder="Type 'd' for dealer, or 'p' for player win"
+            placeholder="'d' dealer, 'p' player, 't' tie, 'u' undo, 'c' clear"
             autoFocus
             style={{
               margin: '10px',
-              width: `${"Type 'd' for dealer, or 'p' for player win".length - 10}ch`,
+              width: `${"'d' dealer, 'p' player, 't' tie, 'u' undo, 'c' clear".length}ch`,
             }}
           />
           {err && <div style={{ color: 'cyan' }}>Non-supported key input!</div>}

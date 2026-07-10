@@ -58,6 +58,7 @@
 }
 
 .box {
+  position: relative;
   width: 40px;
   height: 40px;
   display: flex;
@@ -71,6 +72,53 @@
 
 .playerWin {
   color: blue;
+}
+
+.tieWin {
+  color: green;
+}
+
+.tie-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 2px;
+  border-radius: 50%;
+  background: green;
+  color: white;
+  font-size: 10px;
+  line-height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.stats__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stats__item--dealer strong {
+  color: red;
+}
+
+.stats__item--player strong {
+  color: blue;
+}
+
+.stats__item--tie strong {
+  color: green;
 }
 
 .clear-button {

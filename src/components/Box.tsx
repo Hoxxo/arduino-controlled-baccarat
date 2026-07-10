@@ -1,14 +1,30 @@
 import { Player } from './Constants.ts';
-import { playerWin, dealerWin } from './Winners.tsx';
+import { dealerWin, playerWin, tieWin } from './Winners.tsx';
+import type { Cell } from './GameLogic.ts';
 
 export type BoxProps = {
-  winner: Player;
+  cell: Cell;
 };
 
-export default function Box(props: BoxProps) {
+export default function Box({ cell }: BoxProps) {
+  const symbol =
+    cell.winner === Player.Dealer
+      ? dealerWin()
+      : cell.winner === Player.Player
+        ? playerWin()
+        : tieWin();
+
+  const showBadge =
+    cell.tieCount > 0 && !(cell.winner === Player.Tie && cell.tieCount === 1);
+
   return (
     <button className="box">
-      {props.winner === Player.Dealer ? dealerWin() : playerWin()}
+      {symbol}
+      {showBadge && (
+        <span className="tie-badge">
+          {cell.tieCount > 1 ? cell.tieCount : ''}
+        </span>
+      )}
     </button>
   );
 }
