@@ -4,16 +4,22 @@ export type Cell =
   | { kind: 'result'; winner: Player.Dealer | Player.Player; tieCount: number }
   | { kind: 'tie'; tieCount: number };
 
+/** A column on a real Big Road board only ever holds 6 cells of a streak. */
+export const BIG_ROAD_ROWS = 6;
+
 /**
  * Rebuilds the Big Road board from the full chronological event log.
  * Ties don't start a new column; they tally onto the most recent
  * Dealer/Player cell. A run of ties before any Dealer/Player result gets
  * its own standalone cell so it's never lost, even if no result ever follows.
+ * A streak longer than BIG_ROAD_ROWS spills into a new column to its right
+ * ("dragon tail") instead of growing a single column without limit.
  */
 export function buildMat(events: Player[]): Cell[][] {
   const mat: Cell[][] = [];
   let currentCol: Cell[] = [];
   let hasResult = false;
+  let streakWinner: Player.Dealer | Player.Player | null = null;
 
   for (const event of events) {
     if (event === Player.Tie) {
@@ -26,10 +32,10 @@ export function buildMat(events: Player[]): Cell[][] {
     }
 
     hasResult = true;
-    const lastCell = currentCol[currentCol.length - 1];
-    if (lastCell?.kind === 'result' && lastCell.winner === event) {
+    if (streakWinner === event && currentCol.length < BIG_ROAD_ROWS) {
       currentCol.push({ kind: 'result', winner: event, tieCount: 0 });
     } else {
+      streakWinner = event;
       currentCol = [{ kind: 'result', winner: event, tieCount: 0 }];
       mat.push(currentCol);
     }
