@@ -68,11 +68,7 @@
   margin: 8px 0;
   min-height: 96px;
   background:
-    radial-gradient(
-      ellipse at top,
-      rgba(255, 255, 255, 0.06),
-      transparent 60%
-    ),
+    radial-gradient(ellipse at top, rgba(255, 255, 255, 0.06), transparent 60%),
     linear-gradient(160deg, #0b6e4f 0%, #0a5c41 45%, #084a34 100%);
   border: 3px solid #2a1c0f;
   border-radius: 14px;
@@ -179,8 +175,36 @@
   box-shadow: 0 0 0 2px #084a34;
 }
 
+.stats-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.stats-window {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.stats-window select,
+#method-select {
+  padding: 5px 8px;
+  border: 1px solid rgba(127, 127, 127, 0.35);
+  border-radius: 7px;
+  background: inherit;
+  color: inherit;
+  font: inherit;
+}
+
 .stats {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
   padding: 10px 4px;
   font-size: 14px;
@@ -226,4 +250,74 @@
 .clear-button:hover {
   border-color: #e0453f;
   color: #e0453f;
+}
+
+.gamepad-controller {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.controller-status,
+.controller-message {
+  max-width: 620px;
+  padding: 8px 12px;
+  border: 1px solid rgba(212, 175, 106, 0.45);
+  border-radius: 8px;
+  color: #d4af6a;
+  font-size: 13px;
+}
+
+.controller-status--connected {
+  border-color: rgba(63, 181, 109, 0.5);
+  color: #3fb56d;
+}
+
+.controller-message--error {
+  color: #e0453f;
+}
+
+.gamepad-bindings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.gamepad-binding {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: rgba(127, 127, 127, 0.1);
+  font-size: 12px;
+}
+
+.gamepad-binding kbd {
+  min-width: 20px;
+  padding: 2px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-weight: 800;
+}
+
+.controller-diagnostics {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .stats__item {
+    min-width: 68px;
+    padding: 7px 10px;
+  }
 }

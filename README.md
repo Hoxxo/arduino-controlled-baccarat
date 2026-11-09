@@ -1,4 +1,32 @@
-# React + TypeScript + Vite
+# Arduino-controlled Baccarat
+
+## Controls
+
+Choose an input method in the app:
+
+- Text: `p` player, `d` banker, `t` tie, `u` undo, and `c` clear.
+- Arduino: connect the board over Web Serial and use the wired buttons.
+- Nintendo Switch controller: first pair the controller in your computer's
+  Bluetooth settings, select **Nintendo Switch controller**, and press any
+  controller button so the browser can detect it.
+
+Nintendo controls are Y for Player, A for Banker, X for Tie, R for Undo, and
+ZR for Clear. A controller button triggers once per press, so holding it does
+not repeat an action. The app automatically uses the rotated browser mapping
+reported for a single right Joy-Con while retaining the standard mapping for a
+Switch Pro Controller.
+
+Clear is undoable. If the board is cleared accidentally, the next Undo restores
+the complete cleared shoe. Subsequent Undo actions continue stepping backward
+through earlier results.
+
+The road keeps the complete shoe history. The tally and percentages use only
+the latest 10 or 20 hands, selected in the statistics panel.
+
+Gamepad and serial input require a supporting browser and a secure context
+(HTTPS or localhost).
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

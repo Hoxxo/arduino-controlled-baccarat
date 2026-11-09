@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Player } from './Constants.ts';
 import SerialController from './SerialController.tsx';
 import { InputMethods } from './Constants.ts';
+import GamepadController from './GamepadController.tsx';
 
 type ControllerProps = {
   selectedController: InputMethods;
@@ -71,8 +72,10 @@ export default function Controller({
           />
           {err && <div style={{ color: 'cyan' }}>Non-supported key input!</div>}
         </>
-      ) : (
+      ) : selectedController === InputMethods.Arduino ? (
         <SerialController onInput={onSerialInput} />
+      ) : (
+        <GamepadController onAction={onAction} />
       )}
     </>
   );

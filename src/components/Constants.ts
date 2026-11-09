@@ -5,6 +5,10 @@ export enum Player {
 }
 
 export enum InputMethods {
-  Text,
-  Arduino,
+  Text = 'text',
+  Arduino = 'arduino',
+  NintendoSwitch = 'nintendo-switch',
 }
+
+export const STATS_WINDOW_OPTIONS = [10, 20] as const;
+export type StatsWindow = (typeof STATS_WINDOW_OPTIONS)[number];

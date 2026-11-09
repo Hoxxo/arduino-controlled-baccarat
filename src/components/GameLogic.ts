@@ -54,13 +54,17 @@ export type Stats = {
   tiePct: number;
 };
 
-export function computeStats(events: Player[]): Stats {
-  const total = events.length;
+export function computeStats(events: Player[], windowSize = 20): Stats {
+  const safeWindowSize = Math.max(0, Math.floor(windowSize));
+  const recentEvents = events.slice(
+    Math.max(0, events.length - safeWindowSize)
+  );
+  const total = recentEvents.length;
   let dealerWins = 0;
   let playerWins = 0;
   let ties = 0;
 
-  for (const event of events) {
+  for (const event of recentEvents) {
     if (event === Player.Dealer) dealerWins++;
     else if (event === Player.Player) playerWins++;
     else ties++;

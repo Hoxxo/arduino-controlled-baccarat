@@ -1,31 +1,87 @@
-import { useCallback, useMemo, useState } from 'react';
-import { Player } from './components/Constants.ts';
+import { useCallback, useMemo, useReducer, useState } from 'react';
+import {
+  InputMethods,
+  Player,
+  type StatsWindow,
+} from './components/Constants.ts';
 import Board from './components/Board.tsx';
-import { InputMethods } from './components/Constants.ts';
 import Controller from './components/Controller.tsx';
 import Stats from './components/Stats.tsx';
 import { buildMat, computeStats } from './components/GameLogic.ts';
 import './App.css';
 
+type UndoEntry = { kind: 'add' } | { kind: 'clear'; clearedEvents: Player[] };
+
+type GameState = {
+  events: Player[];
+  undoStack: UndoEntry[];
+};
+
+type GameAction =
+  | { type: 'add'; player: Player }
+  | { type: 'undo' }
+  | { type: 'clear' };
+
+const initialGameState: GameState = {
+  events: [],
+  undoStack: [],
+};
+
+function gameReducer(state: GameState, action: GameAction): GameState {
+  if (action.type === 'add') {
+    return {
+      events: [...state.events, action.player],
+      undoStack: [...state.undoStack, { kind: 'add' }],
+    };
+  }
+
+  if (action.type === 'clear') {
+    if (state.events.length === 0) return state;
+
+    return {
+      events: [],
+      undoStack: [
+        ...state.undoStack,
+        { kind: 'clear', clearedEvents: state.events },
+      ],
+    };
+  }
+
+  const lastEntry = state.undoStack[state.undoStack.length - 1];
+  if (!lastEntry) return state;
+
+  return {
+    events:
+      lastEntry.kind === 'clear'
+        ? lastEntry.clearedEvents
+        : state.events.slice(0, -1),
+    undoStack: state.undoStack.slice(0, -1),
+  };
+}
+
 function App() {
-  const [events, setEvents] = useState<Player[]>([]);
+  const [{ events }, dispatch] = useReducer(gameReducer, initialGameState);
   const [inputMethod, setInputMethod] = useState<InputMethods>(
     InputMethods.Text
   );
+  const [statsWindow, setStatsWindow] = useState<StatsWindow>(20);
 
   const mat = useMemo(() => buildMat(events), [events]);
-  const stats = useMemo(() => computeStats(events), [events]);
+  const stats = useMemo(
+    () => computeStats(events, statsWindow),
+    [events, statsWindow]
+  );
 
   const addWinner = useCallback((player: Player) => {
-    setEvents((prev) => [...prev, player]);
+    dispatch({ type: 'add', player });
   }, []);
 
   const undo = useCallback(() => {
-    setEvents((prev) => (prev.length === 0 ? prev : prev.slice(0, -1)));
+    dispatch({ type: 'undo' });
   }, []);
 
   const clear = useCallback(() => {
-    setEvents([]);
+    dispatch({ type: 'clear' });
   }, []);
 
   const handleInput = useCallback(
@@ -65,23 +121,25 @@ function App() {
       </div>
 
       <div className="board-row">
-        <Stats stats={stats} />
+        <Stats
+          stats={stats}
+          windowSize={statsWindow}
+          onWindowSizeChange={setStatsWindow}
+        />
       </div>
 
       <div className="controls">
         <label htmlFor="method-select">Choose control method: </label>
         <select
           id="method-select"
-          onChange={(e) =>
-            setInputMethod(
-              e.target.value === 'text'
-                ? InputMethods.Text
-                : InputMethods.Arduino
-            )
-          }
+          value={inputMethod}
+          onChange={(e) => setInputMethod(e.target.value as InputMethods)}
         >
-          <option value="text">Text</option>
-          <option value="ard">Arduino</option>
+          <option value={InputMethods.Text}>Text</option>
+          <option value={InputMethods.Arduino}>Arduino</option>
+          <option value={InputMethods.NintendoSwitch}>
+            Nintendo Switch controller
+          </option>
         </select>
         <div>
           <Controller
@@ -92,8 +150,12 @@ function App() {
         </div>
       </div>
       <div>
-        <button className="clear-button" onClick={clear}>
-          Clear Board
+        <button
+          className="clear-button"
+          onClick={clear}
+          title="You can restore a cleared board with Undo"
+        >
+          Clear Board (undoable)
         </button>
       </div>
     </>
